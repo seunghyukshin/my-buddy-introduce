@@ -1,7 +1,7 @@
 import React from "react";
 import KaKaoLogin from "react-kakao-login";
 
-import { KAKAO_API_KEY } from "./config.js";
+import { KAKAO_API_KEY } from "../config.js";
 
 const KakaoLogin = function () {
   const onKakaoSucess = (res) => {
