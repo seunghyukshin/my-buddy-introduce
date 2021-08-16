@@ -5,7 +5,7 @@ function App() {
   return (
     <div>
       <Route exact path="/" component={Home} />
-      <Route path="/auth" component={Auth} />
+      <Route path="/oauth" component={Auth} />
     </div>
   );
 }
