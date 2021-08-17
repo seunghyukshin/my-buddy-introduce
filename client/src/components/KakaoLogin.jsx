@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import KaKaoLogin from "react-kakao-login";
 
 import { KAKAO_API_KEY } from "../config.js";
 
 const KakaoLogin = function () {
+  // const [isLogin, setIsLogin] = useState(false);
   const onKakaoSucess = (res) => {
     axios.get("/api").then((res) => console.log(res));
     console.log(res);
