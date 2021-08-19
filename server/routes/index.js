@@ -1,30 +1,29 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const User = require("./models/user");
-router.get("/", function (req, res) {
-  // GET ALL BOOKS
-  User.find(function (err, users) {
-    if (err) return res.status(500).send({ error: "database failure" });
+import User from "../models/user.js";
+
+router.get("/users", (req, res) => {
+  User.find((err, users) => {
+    if (err) return res.status(500).send({ error: "db failure" });
     res.json(users);
   });
 });
 
-router.post("/", function (req, res) {
+// CREATE USER
+router.post("/users", (req, res) => {
   const user = new User();
-  // console.log(req);
   user.name = req.body.name;
   user.author = req.body.author;
 
-  user.save(function (err) {
+  user.save((err) => {
     if (err) {
-      console.error(err);
+      console.log(err);
       res.json({ result: 0 });
       return;
     }
-
     res.json({ result: 1 });
   });
 });
 
-module.exports = router;
+export default router;

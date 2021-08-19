@@ -7,7 +7,10 @@ import { KAKAO_API_KEY } from "../config.js";
 const KakaoLogin = function () {
   // const [isLogin, setIsLogin] = useState(false);
   const onKakaoSucess = (res) => {
-    axios.get("/api").then((res) => console.log(res));
+    axios
+      .post("/api/users", { name: "a", author: "ssh" })
+      .then((res) => console.log(res));
+    // axios.get("/api/users").then((res) => console.log(res));
     console.log(res);
   };
   return (

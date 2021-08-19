@@ -1,8 +1,12 @@
-const express = require("express");
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
 const app = express();
 
+const { PORT, MONGO_URI } = process.env;
 /* connect db */
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const db = mongoose.connection;
 db.on("error", console.error);
 db.once("open", function () {
@@ -10,11 +14,13 @@ db.once("open", function () {
   console.log("Connected to mongod server");
 });
 
-mongoose.connect("mongodb://localhost:27017/my-buddy-introuce");
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Successfully connected to mongodb"))
+  .catch((e) => console.error(e));
 
 /* router */
-const api = require("./routes/index");
+import api from "./routes/index.js";
 app.use("/api", api);
 
-const port = 5000;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
