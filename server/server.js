@@ -2,7 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import bodyParser from "body-parser";
 const app = express();
+app.use(express.json());
 
 const { PORT, MONGO_URI } = process.env;
 /* connect db */
