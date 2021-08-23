@@ -3,7 +3,17 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   name: String,
-  author: String,
+  email: String,
+  social: {
+    kakao: {
+      id: Number,
+    },
+    facebook: {
+      id: Number,
+    },
+  },
+  friends: [],
+  contents: {},
 });
 
 export default mongoose.model("User", userSchema);
