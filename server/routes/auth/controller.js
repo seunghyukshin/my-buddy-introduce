@@ -1,8 +1,11 @@
 /*
-    POST /api/auth/register
+    POST /api/auth/login
     {
         username,
-        password
+        email,
+        social,
+        friends,
+        contents
     }
 */
 import User from "../../models/user.js";
@@ -11,32 +14,47 @@ const login = (req, res) => {
   const { name, email, social, friends } = req.body;
   let newUser = null;
 
-  const create = (user) => {
+  const checkId = (user) => {
     if (user) {
-      // throw new Error ("이미 존재");
+      console.log("a");
+      return User.updateToken(user, social);
     } else {
-      return User.create(name, email, social, friends);
+      console.log("b");
+      return findByEmail(user);
+    }
+  };
+  const findByEmail = (user) => {
+    if (!email) {
+      console.log("클라이언트로부터 받아온 이메일이 존재하지 않습니다.");
+      // throw Error("클라이언트로부터 받아온 이메일이 존재하지 않습니다.")
+      // go create
+      return create();
+    } else {
+      console.log("c");
+      return User.findOneByUserEmail(email).then(checkEmail);
     }
   };
 
-  const count = (user) => {
-    newUser = user;
-    return User.count({}).exec();
+  const checkEmail = (user) => {
+    if (user) {
+      console.log("d");
+      return User.updateAnotherSocial(user, social);
+    } else {
+      // go create
+      console.log("e");
+      return create();
+    }
   };
 
-  // assign admin if count is 1
-  const assign = (count) => {
-    if (count === 1) {
-      return newUser.assignAdmin();
-    } else {
-      // if not, return a promise that returns false
-      return Promise.resolve(false);
-    }
+  const create = () => {
+    console.log("f");
+    return User.create(name, email, social, friends);
   };
 
   const respond = (count) => {
+    console.log("login success");
     res.json({
-      msg: "success",
+      msg: "login success",
     });
   };
 
@@ -45,20 +63,8 @@ const login = (req, res) => {
       message: error.message,
     });
   };
-  console.log("aa", User);
-  User.findOneByUsername(name)
-    .then(create)
-    .then(count)
-    .then(assign)
-    .then(respond)
-    .catch(onError);
+
+  User.findOneBySocialId(social).then(checkId).then(respond).catch(onError);
 };
 
 export { login };
-
-// router.get("/login", (req, res) => {
-//   User.find((err, users) => {
-//     if (err) return res.status(500).send({ error: "db failure" });
-//     res.json(users);
-//   });
-// });

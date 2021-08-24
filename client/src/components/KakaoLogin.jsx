@@ -12,8 +12,8 @@ const KakaoLogin = function () {
     axios
       .post("/api/auth/login", {
         name: profile.properties.nickname,
-        email: "abc@naver.com",
-        social: { kakao: { id: profile.id }, accessToken: access_token },
+        // email: "abc@naver.com",
+        social: { kakao: { id: profile.id, accessToken: access_token } },
       })
       .then((res) => console.log(res));
   };
