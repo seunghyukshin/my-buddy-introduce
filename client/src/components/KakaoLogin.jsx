@@ -7,11 +7,15 @@ import { KAKAO_API_KEY } from "../config.js";
 const KakaoLogin = function () {
   // const [isLogin, setIsLogin] = useState(false);
   const onKakaoSucess = (res) => {
+    const { profile } = res;
+    const { access_token } = res.response;
     axios
-      .post("/api/users", { name: "a", author: "ssh" })
+      .post("/api/auth/login", {
+        name: profile.properties.nickname,
+        email: "abc@naver.com",
+        social: { kakao: { id: profile.id }, accessToken: access_token },
+      })
       .then((res) => console.log(res));
-    // axios.get("/api/users").then((res) => console.log(res));
-    console.log(res);
   };
   return (
     <KaKaoLogin
@@ -19,6 +23,7 @@ const KakaoLogin = function () {
       onSuccess={onKakaoSucess}
       onFail={console.error}
       onLogout={console.info}
+      // getProfile={true}
     />
   );
 };
