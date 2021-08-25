@@ -1,17 +1,19 @@
 /*
     POST /api/auth/login
     {
-        username,
+        name,
         email,
         social,
         friends,
         contents
     }
 */
+import jwt from "jsonwebtoken";
 import User from "../../models/user.js";
 
 const login = (req, res) => {
   const { name, email, social, friends } = req.body;
+  const secret = req.app.get("jwt-secret");
   let newUser = null;
 
   const checkId = (user) => {
@@ -51,10 +53,32 @@ const login = (req, res) => {
     return User.create(name, email, social, friends);
   };
 
-  const respond = (count) => {
+  const sign = (user) => {
+    const { name, email, social, friends, contents } = user;
+    const promise = new Promise((resolve, reject) => {
+      jwt.sign(
+        { name, email, social, friends, contents },
+        secret,
+        {
+          expiresIn: "7d", //
+          issuer: "my-home",
+          subject: "userInfo",
+        },
+        (err, token) => {
+          if (err) reject(err);
+          resolve(token);
+        }
+      );
+    });
+    return promise;
+  };
+
+  const respond = (token) => {
+    console.log(token);
     console.log("login success");
     res.json({
       msg: "login success",
+      token,
     });
   };
 
@@ -64,7 +88,11 @@ const login = (req, res) => {
     });
   };
 
-  User.findOneBySocialId(social).then(checkId).then(respond).catch(onError);
+  User.findOneBySocialId(social)
+    .then(checkId)
+    .then(sign)
+    .then(respond)
+    .catch(onError);
 };
 
 export { login };
