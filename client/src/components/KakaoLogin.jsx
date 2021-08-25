@@ -5,7 +5,7 @@ import KaKaoLogin from "react-kakao-login";
 import { KAKAO_API_KEY } from "../config.js";
 
 const KakaoLogin = function () {
-  // const [isLogin, setIsLogin] = useState(false);
+  const [token, setToken] = useState("");
   const onKakaoSucess = (res) => {
     const { profile } = res;
     const { access_token } = res.response;
@@ -15,16 +15,31 @@ const KakaoLogin = function () {
         // email: "abc@naver.com",
         social: { kakao: { id: profile.id, accessToken: access_token } },
       })
-      .then((res) => console.log(res));
+      .then((res) => setToken(res.data.token));
+  };
+
+  const checkVerify = () => {
+    axios
+      .get("/api/auth/verify", {
+        headers: {
+          "x-access-token": token,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
   };
   return (
-    <KaKaoLogin
-      token={KAKAO_API_KEY}
-      onSuccess={onKakaoSucess}
-      onFail={console.error}
-      onLogout={console.info}
-      // getProfile={true}
-    />
+    <>
+      <KaKaoLogin
+        token={KAKAO_API_KEY}
+        onSuccess={onKakaoSucess}
+        onFail={console.error}
+        onLogout={console.info}
+        // getProfile={true}
+      />
+      <button onClick={checkVerify}></button>
+    </>
   );
 };
 

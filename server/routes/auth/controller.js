@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+import User from "../../models/user.js";
+
 /*
     POST /api/auth/login
     {
@@ -8,8 +11,6 @@
         contents
     }
 */
-import jwt from "jsonwebtoken";
-import User from "../../models/user.js";
 
 const login = (req, res) => {
   const { name, email, social, friends } = req.body;
@@ -95,4 +96,40 @@ const login = (req, res) => {
     .catch(onError);
 };
 
-export { login };
+/*
+    GET /api/auth/verify
+*/
+
+const verify = (req, res) => {
+  console.log(req.headers);
+  const token = req.headers["x-access-token"] || req.query.token;
+  console.log(token);
+  if (!token) {
+    return res.status(403).json({
+      success: false,
+      message: "토큰값이 유효하지 않습니다.",
+    });
+  }
+
+  const promise = new Promise((resolve, reject) => {
+    jwt.verify(token, req.app.get("jwt-secret"), (err, decoded) => {
+      if (err) reject(err);
+      resolve(decoded);
+    });
+  });
+
+  const respond = (token) => {
+    res.json({
+      success: true,
+      info: token,
+    });
+  };
+
+  const onError = (error) => {
+    res.status(403).json({ success: false, message: error.message });
+  };
+
+  promise.then(respond).catch(onError);
+};
+
+export { login, verify };
