@@ -1,11 +1,15 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
 const app = express();
 app.use(express.json());
 
+/*  .env  */
+import dotenv from "dotenv";
+dotenv.config();
 const { PORT, MONGO_URI, SECRET } = process.env;
+
+/* console middleware*/
+import morgan from "morgan";
+app.use(morgan("dev"));
 
 /* set jwt secret key */
 app.set("jwt-secret", SECRET);
