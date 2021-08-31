@@ -26,6 +26,7 @@ const login = (req, res) => {
       return findByEmail(user);
     }
   };
+
   const findByEmail = (user) => {
     if (!email) {
       console.log("클라이언트로부터 받아온 이메일이 존재하지 않습니다.");
@@ -75,8 +76,7 @@ const login = (req, res) => {
   };
 
   const respond = (token) => {
-    console.log(token);
-    console.log("login success");
+    console.log("Login success");
     res.json({
       msg: "login success",
       token,

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import KaKaoLogin from "react-kakao-login";
 
-import { KAKAO_API_KEY } from "../config.js";
+const { KAKAO_API_KEY } = process.env;
 
 const KakaoLogin = function () {
   const [token, setToken] = useState("");
