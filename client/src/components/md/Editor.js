@@ -6,7 +6,7 @@ const Editor = () => {
   const [text, setText] = useState('');
 
   let start = null, end = null;
-  const ta = useRef();
+  const textareaRef = useRef();
 
   const renderText = (text) => {
     const __html = marked(text);
@@ -21,20 +21,17 @@ const Editor = () => {
   const handleMouseUp = (event) => {
     start = event.target.selectionStart;
     end = event.target.selectionEnd;
-
-    console.log(start, end);
   }
+
   const handleMouseLeave = (event) => {
     start = event.target.selectionStart;
     end = event.target.selectionEnd;
-
-    console.log(start, end);
   }
 
   const onClickH1 = () => {
     if(!end){
       setText(text + '# ');
-      ta.current.focus();
+      textareaRef.current.focus();
       return;
     }
 
@@ -44,13 +41,13 @@ const Editor = () => {
 
     setText(before + `# ${contents}` + after);
 
-    ta.current.focus();
+    textareaRef.current.focus();
   }
 
   const onClickH2 = () => {
     if(!end){
       setText(text + '## ');
-      ta.current.focus();
+      textareaRef.current.focus();
       return;
     }
 
@@ -60,13 +57,13 @@ const Editor = () => {
 
     setText(before + `## ${contents}` + after);
 
-    ta.current.focus();
+    textareaRef.current.focus();
   }
 
   const onClickH3 = () => {
     if(!end){
       setText(text + '### ');
-      ta.current.focus();
+      textareaRef.current.focus();
       return;
     }
 
@@ -76,13 +73,13 @@ const Editor = () => {
 
     setText(before + `### ${contents}` + after);
 
-    ta.current.focus();
+    textareaRef.current.focus();
   }
 
   const onClickLi = () => {
     if(!end){
       setText(text + '- ');
-      ta.current.focus();
+      textareaRef.current.focus();
       return;
     }
 
@@ -92,13 +89,13 @@ const Editor = () => {
 
     setText(before + `- ${contents}\n` + after);
 
-    ta.current.focus();
+    textareaRef.current.focus();
   }
 
   const onClickBold = () => {
     if(!end){
-      setText(text + '\`\` ');
-      ta.current.focus();
+      setText(text + '____ ');
+      textareaRef.current.focus();
       return;
     }
 
@@ -106,15 +103,15 @@ const Editor = () => {
     const contents = text.substring(start, end);
     const after = text.substring(end, text.length);
 
-    setText(before + `\`${contents}\`` + after);
+    setText(before + `__${contents}__` + after);
 
-    ta.current.focus();
+    textareaRef.current.focus();
   }
 
   const onClickStrikeout = () => {
     if(!end){
       setText(text + '~~ ');
-      ta.current.focus();
+      textareaRef.current.focus();
       return;
     }
 
@@ -124,7 +121,7 @@ const Editor = () => {
 
     setText(before + `~${contents}~` + after);
 
-    ta.current.focus();
+    textareaRef.current.focus();
   }
   
   const onClickReset = () => {
@@ -143,7 +140,7 @@ const Editor = () => {
           <div className="button" onClick={onClickStrikeout}>strikeout</div>
           <div className="button" onClick={onClickReset}>reset</div>
         </div>
-        <textarea ref={ta} name="" id="" cols="30" rows="10" className="input" value={text} onChange={handleChange} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}>
+        <textarea ref={textareaRef} name="" id="" cols="30" rows="10" className="input" value={text} onChange={handleChange} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}>
           
         </textarea>
       </div>
