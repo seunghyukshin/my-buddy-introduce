@@ -1,21 +1,32 @@
 import React from "react";
-import "./Footer.css";
+import styled from "styled-components";
 
 const Footer = () => {
   return (
-    <div className="container">
-      <footer className="footer">
-        <nav>
-          <a href="">내 친 소</a>
-          <ul className="menu-ul">
-            <li><a href="">랭킹</a></li>
-            <li><a href="">최근 변경</a></li>
-          </ul>
-          <a href="">로그인</a>
-        </nav>
-      </footer>
-    </div>
+    <Container>
+      <Text>
+        @ 2021 남궁명 & 신승혁
+      </Text>
+    </Container>
   )
 };
+
+const Container = styled.div`
+  border-top: 1px solid grey;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:100vw;
+
+  height: 60px;
+`;
+
+const Text = styled.span`
+  text-size: 20px;
+  font-weight: bold;
+`;
 
 export default Footer;
