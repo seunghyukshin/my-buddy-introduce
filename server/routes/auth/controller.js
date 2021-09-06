@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import randToken from "rand-token";
+
 import User from "../../models/user.js";
 
 /*
@@ -15,8 +17,8 @@ import User from "../../models/user.js";
 const login = (req, res) => {
   const { name, email, social, friends } = req.body;
   const secret = req.app.get("jwt-secret");
-  let newUser = null;
-
+  const options = JSON.parse(process.env.OPTIONS);
+  console.log(options);
   const checkId = (user) => {
     if (user) {
       console.log("a");
@@ -56,30 +58,31 @@ const login = (req, res) => {
   };
 
   const sign = (user) => {
-    const { name, email, social, friends, contents } = user;
+    const { name, email, social } = user;
+    const payload = {
+      name,
+      email,
+      social,
+    };
+
     const promise = new Promise((resolve, reject) => {
-      jwt.sign(
-        { name, email, social, friends, contents },
-        secret,
-        {
-          expiresIn: "7d", //
-          issuer: "my-home",
-          subject: "userInfo",
-        },
-        (err, token) => {
-          if (err) reject(err);
-          resolve(token);
-        }
-      );
+      jwt.sign(payload, secret, options, (err, token) => {
+        if (err) reject(err);
+        resolve(token);
+      });
     });
+
     return promise;
   };
 
-  const respond = (token) => {
+  const respond = (accessToken) => {
     console.log("Login success");
     res.json({
       msg: "login success",
-      token,
+      token: {
+        accessToken,
+        refreshToken: randToken.uid(256),
+      },
     });
   };
 

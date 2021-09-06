@@ -3,8 +3,8 @@ import { KakaoLogin } from "../components";
 import MD from "../components/md/Editor";
 
 const Home = () => {
-  // return <KakaoLogin />;
-  return <MD></MD>
+  return <KakaoLogin />;
+  // return <MD></MD>
 };
 
 export default Home;

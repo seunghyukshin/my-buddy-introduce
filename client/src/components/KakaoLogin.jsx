@@ -15,7 +15,10 @@ const KakaoLogin = function () {
         // email: "abc@naver.com",
         social: { kakao: { id: profile.id, accessToken: access_token } },
       })
-      .then((res) => setToken(res.data.token));
+      .then((res) => {
+        console.log(res.data.token);
+        setToken(res.data.token);
+      });
   };
 
   const checkVerify = () => {
