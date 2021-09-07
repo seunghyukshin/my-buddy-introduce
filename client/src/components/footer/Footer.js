@@ -12,7 +12,7 @@ const Footer = () => {
 };
 
 const Container = styled.div`
-  border-top: 1px solid grey;
+  border-top: 1px solid #ccc;
 
   box-sizing: border-box;
 
@@ -26,7 +26,6 @@ const Container = styled.div`
 
 const Text = styled.span`
   text-size: 20px;
-  font-weight: bold;
 `;
 
 export default Footer;
