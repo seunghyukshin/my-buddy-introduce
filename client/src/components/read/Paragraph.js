@@ -1,9 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, {css} from 'styled-components';
 import marked from 'marked';
 
 const Paragraph = (props) => {
-  const {index, subtitle, text} = props;
+  const {id, index, subtitle, text} = props;
+  const [hide, setHide] = useState(false);
 
   const renderText = (text) => {
     const __html = marked(text);
@@ -11,14 +12,29 @@ const Paragraph = (props) => {
     return { __html };
   }; 
 
+
+  const onClickHide = () => {
+    setHide(!hide);
+  }
+
   return (
-    <Container>
-      <Subtitle>
-        <HideButton>{`>`}</HideButton>
-        <SubtitleNumber>{index}.</SubtitleNumber>
-        <SubtitleText>{subtitle}</SubtitleText>
-      </Subtitle>
-      <SubContents dangerouslySetInnerHTML={renderText(text)}/>
+    <Container id={id}>
+      {hide ? (
+        <Subtitle hide={true} onClick={onClickHide}>
+          <HideButton>{`>`}</HideButton>
+          <SubtitleNumber>{index}.</SubtitleNumber>
+          <SubtitleText>{subtitle}</SubtitleText>
+        </Subtitle>
+      ) : 
+      ( <>
+          <Subtitle onClick={onClickHide}>
+            <HideButton>{`∨`}</HideButton>
+            <SubtitleNumber>{index}.</SubtitleNumber>
+            <SubtitleText>{subtitle}</SubtitleText>
+          </Subtitle>
+          <SubContents dangerouslySetInnerHTML={renderText(text)}/>
+        </>
+      )}
   </Container>
   );
 }
@@ -36,6 +52,19 @@ const Subtitle = styled.div`
   width: 100%;
   border-bottom: 1px solid #ccc;
   margin-bottom: 14px;
+
+  &:hover{
+    cursor:pointer;
+  }
+
+  ${props => 
+    props.hide && 
+    css`
+      & > span{
+        opacity:0.5
+      }
+    `
+  }
 `;
 
 const HideButton = styled.span`
@@ -67,14 +96,30 @@ const SubContents = styled.span`
   font-size: 14px;
   color: #373a3c;
 
+  & p {
+    margin: 2px;
+  }
+
   & li {
     margin-left: 20px;
     margin-bottom:20px;
   }
 
-  & a{
+  & a {
     color:#0275d8;
     text-decoration: none;
+  }
+
+  & blockquote{
+    padding-left: 20px;
+    border-left:4px solid #ccc;
+  }
+
+  & code{
+    background: #ddd;
+    border-radius: 2px;
+    padding: 1px;
+    margin:2px;
   }
 `;
 

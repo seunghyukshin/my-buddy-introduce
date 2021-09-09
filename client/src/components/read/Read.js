@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import Paragraph from "./Paragraph";
 import Index from "./Index";
-import data from "./Read_dummy";
 
-const Read = () => {
+const Read = (props) => {
+  const {data} = props;
+
   return (
     <Container>
       <Contents>
@@ -14,11 +15,16 @@ const Read = () => {
         />
         {data.map(({subtitle, text}, i) => (
           <Paragraph
+            id={`paragraph_${i}`}
             index={i + 1}
             subtitle={subtitle}
             text={text}
           />
-        ))}
+          ))}
+          <Paragraph
+            subtitle={"subtitle"}
+            text={'```hello world!``` \n\n `a`'}
+          />
       </Contents>
     </Container>
   );

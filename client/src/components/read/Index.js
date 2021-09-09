@@ -4,12 +4,16 @@ import styled from 'styled-components';
 const Index = (props) => {
   const {data} = props;
 
+  const onClickIndex = (i) => {
+    window.location.hash=`paragraph_${i}`;
+  }
+
   return (
     <Container>
       <IndexHead>목차</IndexHead>
       {data.map(({subtitle}, i) => (
         <IndexText>
-          <IndexNumber>{i + 1}.</IndexNumber> {subtitle}
+          <IndexNumber onClick={() => onClickIndex(i)}>{i + 1}.</IndexNumber> {subtitle}
         </IndexText>  
       ))}
    </Container>
@@ -29,8 +33,12 @@ const IndexHead = styled.span`
   margin-bottom: 10px;
 `;
 
-const IndexNumber = styled.span`
+const IndexNumber = styled.a`
   color: #0275d8;
+
+  &:hover{
+    cursor:pointer;
+  }
 `;
 
 const IndexText = styled.span`
