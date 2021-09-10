@@ -21,10 +21,6 @@ const Read = (props) => {
             text={text}
           />
           ))}
-          <Paragraph
-            subtitle={"subtitle"}
-            text={'```hello world!``` \n\n `a`'}
-          />
       </Contents>
     </Container>
   );
