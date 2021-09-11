@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
+import styled from 'styled-components';
 import marked from 'marked';
-import './Editor.css';
 
 const Editor = () => {
   const [text, setText] = useState('');
@@ -129,26 +129,67 @@ const Editor = () => {
   }
 
   return (
-    <div className="container">
-      <div className="section">
-        <div className="menu">
-          <div className="button" onClick={onClickH1}>h1</div>
-          <div className="button" onClick={onClickH2}>h2</div>
-          <div className="button" onClick={onClickH3}>h3</div>
-          <div className="button" onClick={onClickLi}>li</div>
-          <div className="button" onClick={onClickBold}>bold</div>
-          <div className="button" onClick={onClickStrikeout}>strikeout</div>
-          <div className="button" onClick={onClickReset}>reset</div>
-        </div>
-        <textarea ref={textareaRef} name="" id="" cols="30" rows="10" className="input" value={text} onChange={handleChange} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}>
-          
-        </textarea>
-      </div>
-      <div className="section">
+    <Container>
+      <Section>
+        <Menu>
+          <Button onClick={onClickH2}>h2</Button>
+          <Button onClick={onClickH1}>h1</Button>
+          <Button onClick={onClickH3}>h3</Button>
+          <Button onClick={onClickLi}>li</Button>
+          <Button onClick={onClickBold}>bold</Button>
+          <Button onClick={onClickStrikeout}>strikeout</Button>
+          <Button onClick={onClickReset}>reset</Button>
+        </Menu>
+        <Textarea ref={textareaRef} cols="30" rows="10" value={text} onChange={handleChange} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}/>
+      </Section>
+      <Section>
         <div dangerouslySetInnerHTML={renderText(text)} />
-      </div>
-    </div>
+      </Section>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+`;
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  margin: 10px;
+  width: 100%;
+  height: 100%;
+`;
+
+const Menu = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const Button = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 30px;
+  min-width: 30px;
+  padding: 2px;
+
+  border: 1px solid grey;
+  border-radius: 2px;
+  margin: 2px;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  min-height: 100%;
+  margin: 2px;
+
+  resize:none;
+`;
 
 export default Editor;
