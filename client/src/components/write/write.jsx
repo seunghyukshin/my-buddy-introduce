@@ -1,33 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import Paragraph from "./Paragraph";
-import Index from "./Index";
+import Editor from "../md-editor/Editor";
 
-const Read = (props) => {
-  const {data} = props;
-
+const Write = () => {
   return (
     <Container>
       <Contents>
-        <Title>로스트 아크</Title>
-        <Index
-          data={data}
-        />
-        {data.map(({subtitle, text}, i) => (
-          <Paragraph
-            id={`paragraph_${i}`}
-            index={i + 1}
-            subtitle={subtitle}
-            text={text}
-          />
-          ))}
+        <Title>로스트 아크 (편집)</Title>
+        <EditorContainer>
+          <Editor></Editor>
+        </EditorContainer>
       </Contents>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   width: 100vw;
+  min-height:calc(100vh - 100px);
   background-color: #efefef;
 
   display: flex;
@@ -36,7 +26,6 @@ const Container = styled.div`
 `;
 
 const Contents = styled.div`
-  height: 100%;
   width: 70vw;
   background-color: white;
   border-right: 1px solid #ccc;
@@ -47,7 +36,7 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 40px;
+  padding: 20px;
 `;
 
 const Title = styled.span`
@@ -56,4 +45,10 @@ const Title = styled.span`
   font-weight: bold;
 `;
 
-export default Read;
+const EditorContainer = styled.div`
+  display:flex;
+  margin-top:16px;
+  width:100%;
+`;
+
+export default Write;
