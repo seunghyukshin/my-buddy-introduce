@@ -156,6 +156,21 @@ const Editor = () => {
     setTag(after.length + 3);
   }
 
+  const onClickImage = () => {
+    if(!end){
+      setText(text + '![]()');
+      setTag(1);
+      return;
+    }
+    
+    const before = text.substring(0, start);
+    const contents = text.substring(start, end);
+    const after = text.substring(end, text.length);
+    
+    setText(before + `![${contents}]()` + after);
+    setTag(after.length + 1);
+  }
+
   useEffect(() => {
     if(tag != -1){
       textareaRef.current.focus();
@@ -187,6 +202,7 @@ const Editor = () => {
               <Button onClick={onClickItalic}>기울기</Button>
               <Button onClick={onClickStrikeout}>취소선</Button>
               <Button onClick={onClickLink}>링크</Button>
+              <Button onClick={onClickImage}>이미지</Button>
             </Right>
           )}
         </Menu>
@@ -319,4 +335,5 @@ const Preview = styled.div`
     margin:2px;
   }
 `;
+
 export default Editor;
