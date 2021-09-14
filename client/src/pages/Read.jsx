@@ -7,9 +7,7 @@ import data from "../components/read/Read_dummy";
 const Read = () => {
   return (
     <>
-      <Header/>
       <Body data={data}/>
-      <Footer/>
     </>
   )
 };
