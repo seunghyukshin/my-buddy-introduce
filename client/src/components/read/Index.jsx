@@ -12,7 +12,7 @@ const Index = (props) => {
     <Container>
       <IndexHead>목차</IndexHead>
       {data.map(({subtitle}, i) => (
-        <IndexText>
+        <IndexText key={`index_${i}`}>
           <IndexNumber onClick={() => onClickIndex(i)}>{i + 1}.</IndexNumber> {subtitle}
         </IndexText>  
       ))}

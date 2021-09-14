@@ -15,6 +15,7 @@ const Read = (props) => {
         />
         {data.map(({subtitle, text}, i) => (
           <Paragraph
+            key={`paragraph_${i}`}
             id={`paragraph_${i}`}
             index={i + 1}
             subtitle={subtitle}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import styled, {css} from 'styled-components';
 import marked from 'marked';
 
@@ -13,9 +14,11 @@ const Paragraph = (props) => {
   }; 
 
 
-  const onClickHide = () => {
-    setHide(!hide);
-  }
+  const onClickHide = (event) => {
+    if(event.target.innerHTML != "[편집]"){
+      setHide(!hide);
+    }
+  };
 
   return (
     <Container id={id}>
@@ -24,6 +27,14 @@ const Paragraph = (props) => {
           <HideButton>{`>`}</HideButton>
           <SubtitleNumber>{index}.</SubtitleNumber>
           <SubtitleText>{subtitle}</SubtitleText>
+          <EditButton to={{
+              pathname:"/write",
+              state:{
+                text:text
+              }
+            }}>
+              [편집]
+            </EditButton>
         </Subtitle>
       ) : 
       ( <>
@@ -31,6 +42,14 @@ const Paragraph = (props) => {
             <HideButton>{`∨`}</HideButton>
             <SubtitleNumber>{index}.</SubtitleNumber>
             <SubtitleText>{subtitle}</SubtitleText>
+            <EditButton to={{
+              pathname:"/write",
+              state:{
+                text:text
+              }
+            }}>
+              [편집]
+            </EditButton>
           </Subtitle>
           <SubContents dangerouslySetInnerHTML={renderText(text)}/>
         </>
@@ -121,6 +140,14 @@ const SubContents = styled.span`
     padding: 1px;
     margin:2px;
   }
+`;
+
+const EditButton = styled(Link)`
+  color:#0275d8;
+  text-decoration:none;
+  font-weight:bold;
+
+  float:right;
 `;
 
 export default Paragraph;

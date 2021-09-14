@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, {css} from 'styled-components';
 import marked from 'marked';
 
-const Editor = () => {
-  const [text, setText] = useState('');
+const Editor = (props) => {
+  const [text, setText] = useState(props.text || '');
   const [tag, setTag] = useState(-1);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);

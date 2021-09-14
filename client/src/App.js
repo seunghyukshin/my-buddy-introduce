@@ -9,7 +9,8 @@ function App() {
     <div>
       <Header/>
 
-      <Route exact path="/" component={Write} />
+      <Route exact path="/" component={Read} />
+      <Route path="/write" component={Write} />
       <Route path="/oauth" component={Auth} />
 
       <Footer/>
