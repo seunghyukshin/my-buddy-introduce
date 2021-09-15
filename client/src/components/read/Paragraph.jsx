@@ -79,7 +79,7 @@ const Subtitle = styled.div`
   ${props => 
     props.hide && 
     css`
-      & > span{
+      & > span, a{
         opacity:0.5
       }
     `
