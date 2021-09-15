@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import randToken from "rand-token";
 
 import User from "../../models/user.js";
+import { promisify } from "util";
+import { redisClient } from "../../utils/redis.js";
 
 /*
     POST /api/auth/login
@@ -17,8 +19,11 @@ import User from "../../models/user.js";
 const login = (req, res) => {
   const { name, email, social, friends } = req.body;
   const secret = req.app.get("jwt-secret");
-  const options = JSON.parse(process.env.OPTIONS);
-  console.log(options);
+  const options = JSON.parse(process.env.ACCESS_OPTIONS);
+
+  const refreshToken = refresh();
+  redisClient.set(name, refreshToken);
+
   const checkId = (user) => {
     if (user) {
       console.log("a");
@@ -135,4 +140,26 @@ const verify = (req, res) => {
   promise.then(respond).catch(onError);
 };
 
-export { login, verify };
+const refresh = () => {
+  const secret = req.app.get("jwt-secret");
+  const options = JSON.parse(process.env.REFRESH_OPTIONS);
+
+  return jwt.sign({}, secret, options);
+};
+
+const refreshVerify = async (token, username) => {
+  const getAsync = promisify(redisClient.get).bind(redisClient);
+  const SUCCESS_RESULT = { ok: true };
+  const FAIL_RESULT = { ok: false };
+  try {
+    const data = await getAsync(username);
+    if (token === data) {
+      return SUCCESS_RESULT;
+    } else {
+      return FAIL_RESULT;
+    }
+  } catch (error) {
+    return FAIL_RESULT;
+  }
+};
+export { login, verify, refresh, refreshVerify };
