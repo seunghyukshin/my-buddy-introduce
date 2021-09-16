@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useState, useRef, useEffect } from 'react';
+import styled, {css} from 'styled-components';
 import marked from 'marked';
 
-const Editor = () => {
-  const [text, setText] = useState('');
+const Editor = (props) => {
+  const [text, setText] = useState(props.text || '');
+  const [cursor, setCursor] = useState(-1);
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
+  const [write, setWrite] = useState(true);
 
-  let start = null, end = null;
   const textareaRef = useRef();
 
   const renderText = (text) => {
@@ -19,19 +22,19 @@ const Editor = () => {
   }
 
   const handleMouseUp = (event) => {
-    start = event.target.selectionStart;
-    end = event.target.selectionEnd;
+    setStart(event.target.selectionStart);
+    setEnd(event.target.selectionEnd);
   }
 
   const handleMouseLeave = (event) => {
-    start = event.target.selectionStart;
-    end = event.target.selectionEnd;
+    setStart(event.target.selectionStart);
+    setEnd(event.target.selectionEnd);
   }
 
   const onClickH1 = () => {
     if(!end){
       setText(text + '# ');
-      textareaRef.current.focus();
+      setCursor((text + '# ').length);
       return;
     }
 
@@ -40,14 +43,13 @@ const Editor = () => {
     const after = text.substring(end, text.length);
 
     setText(before + `# ${contents}` + after);
-
-    textareaRef.current.focus();
+    setCursor((before + `# ${contents}`).length);
   }
 
   const onClickH2 = () => {
     if(!end){
       setText(text + '## ');
-      textareaRef.current.focus();
+      setCursor((text + '## ').length);
       return;
     }
 
@@ -56,14 +58,13 @@ const Editor = () => {
     const after = text.substring(end, text.length);
 
     setText(before + `## ${contents}` + after);
-
-    textareaRef.current.focus();
+    setCursor((before + `## ${contents}`).length);
   }
 
   const onClickH3 = () => {
     if(!end){
       setText(text + '### ');
-      textareaRef.current.focus();
+      setCursor((text + '### ').length);
       return;
     }
 
@@ -72,14 +73,13 @@ const Editor = () => {
     const after = text.substring(end, text.length);
 
     setText(before + `### ${contents}` + after);
-
-    textareaRef.current.focus();
+    setCursor((before + `### ${contents}`).length);
   }
 
   const onClickLi = () => {
     if(!end){
       setText(text + '- ');
-      textareaRef.current.focus();
+      setCursor((text + '- ').length);
       return;
     }
 
@@ -87,15 +87,14 @@ const Editor = () => {
     const contents = text.substring(start, end);
     const after = text.substring(end, text.length);
 
-    setText(before + `- ${contents}\n` + after);
-
-    textareaRef.current.focus();
+    setText(before + `- ${contents}` + after);
+    setCursor((before + `- ${contents}`).length);
   }
 
   const onClickBold = () => {
     if(!end){
-      setText(text + '____ ');
-      textareaRef.current.focus();
+      setText(text + '****');
+      setCursor((text + '**').length);
       return;
     }
 
@@ -103,47 +102,112 @@ const Editor = () => {
     const contents = text.substring(start, end);
     const after = text.substring(end, text.length);
 
-    setText(before + `__${contents}__` + after);
+    setText(before + `**${contents}**` + after);
+    setCursor((before + `**${contents}`).length);
+  }
 
-    textareaRef.current.focus();
+  const onClickItalic = () => {
+    if(!end){
+      setText(text + '**');
+      setCursor((text + '*').length);
+      return;
+    }
+
+    const before = text.substring(0, start);
+    const contents = text.substring(start, end);
+    const after = text.substring(end, text.length);
+
+    setText(before + `*${contents}*` + after);
+    setCursor((before + `*${contents}`).length);
   }
 
   const onClickStrikeout = () => {
     if(!end){
-      setText(text + '~~ ');
-      textareaRef.current.focus();
+      setText(text + '~~');
+      setCursor((text + '~').length);
       return;
     }
-
+    
     const before = text.substring(0, start);
     const contents = text.substring(start, end);
     const after = text.substring(end, text.length);
-
+    
     setText(before + `~${contents}~` + after);
+    setCursor((before + `~${contents}`).length);
+  }
 
-    textareaRef.current.focus();
+  const onClickLink = () => {
+    if(!end){
+      setText(text + '[]()');
+      setCursor((text + '[').length);
+      return;
+    }
+    
+    const before = text.substring(0, start);
+    const contents = text.substring(start, end);
+    const after = text.substring(end, text.length);
+    
+    setText(before + `[${contents}]()` + after);
+    setCursor((before + `[${contents}`).length);
   }
-  
-  const onClickReset = () => {
-    setText('');
+
+  const onClickImage = () => {
+    if(!end){
+      setText(text + '![]()');
+      setCursor((text + '![](').length);
+      return;
+    }
+    
+    const before = text.substring(0, start);
+    const contents = text.substring(start, end);
+    const after = text.substring(end, text.length);
+    
+    setText(before + `![${contents}]()` + after);
+    setCursor((before + `![${contents}](`).length);
   }
+
+  useEffect(() => {
+    if(cursor !== -1){
+      textareaRef.current.focus();
+      textareaRef.current.selectionStart = textareaRef.current.selectionEnd = cursor;
+      setCursor(-1);
+    }
+  }, [cursor]);
+
+  useEffect(() => {
+    setStart(textareaRef.current.selectionStart);
+    setEnd(textareaRef.current.selectionEnd);
+  }, [text]);
 
   return (
     <Container>
       <Section>
         <Menu>
-          <Button onClick={onClickH2}>h2</Button>
-          <Button onClick={onClickH1}>h1</Button>
-          <Button onClick={onClickH3}>h3</Button>
-          <Button onClick={onClickLi}>li</Button>
-          <Button onClick={onClickBold}>bold</Button>
-          <Button onClick={onClickStrikeout}>strikeout</Button>
-          <Button onClick={onClickReset}>reset</Button>
+          <Left>
+            <Button onClick={() => setWrite(true)} selected={write}>편집기</Button>
+            <Button onClick={() => setWrite(false)} selected={!write}>미리보기</Button>
+          </Left>
+          {write && (
+            <Right>
+              <Button onClick={onClickH1}>h1</Button>
+              <Button onClick={onClickH2}>h2</Button>
+              <Button onClick={onClickH3}>h3</Button>
+              <Button onClick={onClickLi}>행</Button>
+              <Button onClick={onClickBold}>굵게</Button>
+              <Button onClick={onClickItalic}>기울기</Button>
+              <Button onClick={onClickStrikeout}>취소선</Button>
+              <Button onClick={onClickLink}>링크</Button>
+              <Button onClick={onClickImage}>이미지</Button>
+            </Right>
+          )}
         </Menu>
-        <Textarea ref={textareaRef} cols="30" rows="10" value={text} onChange={handleChange} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}/>
-      </Section>
-      <Section>
-        <div dangerouslySetInnerHTML={renderText(text)} />
+        <EditContainer>
+          {write ? (
+            <Textarea ref={textareaRef} cols="30" rows="10" value={text} onChange={handleChange} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}/>
+          ) : (
+            <Preview dangerouslySetInnerHTML={renderText(text)} />    
+          )}
+        </EditContainer>
       </Section>
     </Container>
   )
@@ -152,7 +216,8 @@ const Editor = () => {
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  height: 50vh;
+  width:100%;
+  height:100%;
 `;
 
 const Section = styled.div`
@@ -167,29 +232,103 @@ const Section = styled.div`
 
 const Menu = styled.div`
   display: flex;
+  width:100%;
+  justify-content:space-between;
+  flex-wrap: wrap;
+`;
+
+const Left = styled.div`
+  display: flex;
   justify-content: flex-start;
+`;
+
+const Right = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 `;
 
 const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid #fff;
+  border-bottom: none;
 
   height: 30px;
-  min-width: 30px;
-  padding: 2px;
+  min-width: 40px;
+  color:#373a3c;
 
-  border: 1px solid grey;
-  border-radius: 2px;
-  margin: 2px;
+  font-size:14px;
+  padding:8px; 
+
+  &:hover{
+    cursor:pointer;
+  }
+
+  & + &{
+    margin-left:2px;
+  }
+
+  ${props => 
+    props.selected 
+    && css`
+      border: 1px solid #ddd;
+      border-radius: .25rem .25rem 0 0 ;
+      color: #55595c;
+      border-bottom: none;
+    `
+  }
+`;
+
+const EditContainer = styled.div`
+  display: flex;
+  width:100%;
+  min-height: 400px;
+
+  border: 1px solid #ddd;
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
   min-height: 100%;
-  margin: 2px;
-
   resize:none;
+  border:none;
+
+  &:focus{
+    outline:none;
+  }
+`;
+
+const Preview = styled.div`
+  font-size: 14px;
+  color: #373a3c;
+
+  & p {
+    margin: 2px;
+  }
+
+  & li {
+    margin-left: 20px;
+    margin-bottom:20px;
+  }
+
+  & a {
+    color:#0275d8;
+    text-decoration: none;
+  }
+
+  & blockquote{
+    padding-left: 20px;
+    border-left:4px solid #ccc;
+  }
+
+  & code{
+    background: #ddd;
+    border-radius: 2px;
+    padding: 1px;
+    margin:2px;
+  }
 `;
 
 export default Editor;
