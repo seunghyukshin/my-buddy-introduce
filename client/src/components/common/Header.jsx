@@ -46,6 +46,10 @@ const Home = styled.a`
   float: left;
   padding: 0 20px 0 20px;
   display: inline;
+
+  &:hover{
+    cursor:pointer;
+  }
 `;
 
 const Anchor = styled.a`
@@ -59,6 +63,7 @@ const Anchor = styled.a`
 
   &:hover{
     background-color: rgba(255, 255, 255, 0.226);
+    cursor:pointer;
   }
 `;
 
@@ -70,6 +75,10 @@ const LoginButton = styled.a`
   float: right;
   padding: 0 20px 0 20px;
   display: inline;
+
+  &:hover{
+    cursor:pointer;
+  }
 `;
 
 const Ul = styled.ul`
