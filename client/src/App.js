@@ -7,13 +7,13 @@ import "./App.css";
 function App() {
   return (
     <div>
-      <Header/>
+      <Header />
 
       <Route exact path="/" component={Read} />
       <Route path="/write" component={Write} />
       <Route path="/oauth" component={Auth} />
 
-      <Footer/>
+      <Footer />
     </div>
   );
 }

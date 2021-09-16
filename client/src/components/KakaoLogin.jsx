@@ -25,7 +25,7 @@ const KakaoLogin = function () {
     axios
       .get("/api/auth/verify", {
         headers: {
-          "x-access-token": token,
+          "x-access-token": token.accessToken,
         },
       })
       .then((res) => {

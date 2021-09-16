@@ -1,9 +1,8 @@
 import jwt from "jsonwebtoken";
-import randToken from "rand-token";
-
-import User from "../../models/user.js";
 import { promisify } from "util";
 import { redisClient } from "../../utils/redis.js";
+
+import User from "../../models/user.js";
 
 /*
     POST /api/auth/login
@@ -19,11 +18,8 @@ import { redisClient } from "../../utils/redis.js";
 const login = (req, res) => {
   const { name, email, social, friends } = req.body;
   const secret = req.app.get("jwt-secret");
-  const options = JSON.parse(process.env.ACCESS_OPTIONS);
-
-  const refreshToken = refresh();
-  redisClient.set(name, refreshToken);
-
+  const accessOptions = JSON.parse(process.env.ACCESS_OPTIONS);
+  const refreshOptions = JSON.parse(process.env.REFRESH_OPTIONS);
   const checkId = (user) => {
     if (user) {
       console.log("a");
@@ -71,7 +67,7 @@ const login = (req, res) => {
     };
 
     const promise = new Promise((resolve, reject) => {
-      jwt.sign(payload, secret, options, (err, token) => {
+      jwt.sign(payload, secret, accessOptions, (err, token) => {
         if (err) reject(err);
         resolve(token);
       });
@@ -81,12 +77,16 @@ const login = (req, res) => {
   };
 
   const respond = (accessToken) => {
+    // const refreshToken = refresh();
+    const refreshToken = jwt.sign({}, secret, refreshOptions);
+    redisClient.set(name, refreshToken);
+
     console.log("Login success");
     res.json({
       msg: "login success",
       token: {
         accessToken,
-        refreshToken: randToken.uid(256),
+        refreshToken,
       },
     });
   };
@@ -109,37 +109,13 @@ const login = (req, res) => {
 */
 
 const verify = (req, res) => {
-  console.log(req.headers);
-  const token = req.headers["x-access-token"] || req.query.token;
-  console.log(token);
-  if (!token) {
-    return res.status(403).json({
-      success: false,
-      message: "토큰값이 유효하지 않습니다.",
-    });
-  }
-
-  const promise = new Promise((resolve, reject) => {
-    jwt.verify(token, req.app.get("jwt-secret"), (err, decoded) => {
-      if (err) reject(err);
-      resolve(decoded);
-    });
+  res.json({
+    success: true,
+    info: req.decoded,
   });
-
-  const respond = (token) => {
-    res.json({
-      success: true,
-      info: token,
-    });
-  };
-
-  const onError = (error) => {
-    res.status(403).json({ success: false, message: error.message });
-  };
-
-  promise.then(respond).catch(onError);
 };
 
+// TO DO : refresh router
 const refresh = () => {
   const secret = req.app.get("jwt-secret");
   const options = JSON.parse(process.env.REFRESH_OPTIONS);
