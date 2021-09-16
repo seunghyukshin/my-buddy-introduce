@@ -4,7 +4,7 @@ import marked from 'marked';
 
 const Editor = (props) => {
   const [text, setText] = useState(props.text || '');
-  const [tag, setTag] = useState(-1);
+  const [cursor, setCursor] = useState(-1);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
   const [write, setWrite] = useState(true);
@@ -34,7 +34,7 @@ const Editor = (props) => {
   const onClickH1 = () => {
     if(!end){
       setText(text + '# ');
-      setTag(0);
+      setCursor((text + '# ').length);
       return;
     }
 
@@ -43,14 +43,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
 
     setText(before + `# ${contents}` + after);
-    setTag(after.length);
+    setCursor((before + `# ${contents}`).length);
   }
 
   const onClickH2 = () => {
-    console.log('start', start, 'end', end);
     if(!end){
       setText(text + '## ');
-      setTag(0);
+      setCursor((text + '## ').length);
       return;
     }
 
@@ -59,13 +58,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
 
     setText(before + `## ${contents}` + after);
-    setTag(after.length);
+    setCursor((before + `## ${contents}`).length);
   }
 
   const onClickH3 = () => {
     if(!end){
       setText(text + '### ');
-      setTag(0);
+      setCursor((text + '### ').length);
       return;
     }
 
@@ -74,15 +73,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
 
     setText(before + `### ${contents}` + after);
-
-    setTag(after.length);
+    setCursor((before + `### ${contents}`).length);
   }
 
   const onClickLi = () => {
     if(!end){
-      console.log('li');
       setText(text + '- ');
-      setTag(0);
+      setCursor((text + '- ').length);
       return;
     }
 
@@ -91,13 +88,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
 
     setText(before + `- ${contents}` + after);
-    setTag(after.length);
+    setCursor((before + `- ${contents}`).length);
   }
 
   const onClickBold = () => {
     if(!end){
       setText(text + '****');
-      setTag(2);
+      setCursor((text + '**').length);
       return;
     }
 
@@ -106,14 +103,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
 
     setText(before + `**${contents}**` + after);
-
-    setTag(after.length + 2);
+    setCursor((before + `**${contents}`).length);
   }
 
   const onClickItalic = () => {
     if(!end){
       setText(text + '**');
-      setTag(1);
+      setCursor((text + '*').length);
       return;
     }
 
@@ -122,14 +118,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
 
     setText(before + `*${contents}*` + after);
-
-    setTag(after.length + 1);
+    setCursor((before + `*${contents}`).length);
   }
 
   const onClickStrikeout = () => {
     if(!end){
       setText(text + '~~');
-      setTag(1);
+      setCursor((text + '~').length);
       return;
     }
     
@@ -138,13 +133,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
     
     setText(before + `~${contents}~` + after);
-    setTag(after.length + 1);
+    setCursor((before + `~${contents}`).length);
   }
 
   const onClickLink = () => {
     if(!end){
       setText(text + '[]()');
-      setTag(3);
+      setCursor((text + '[').length);
       return;
     }
     
@@ -153,13 +148,13 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
     
     setText(before + `[${contents}]()` + after);
-    setTag(after.length + 3);
+    setCursor((before + `[${contents}`).length);
   }
 
   const onClickImage = () => {
     if(!end){
       setText(text + '![]()');
-      setTag(1);
+      setCursor((text + '![](').length);
       return;
     }
     
@@ -168,16 +163,16 @@ const Editor = (props) => {
     const after = text.substring(end, text.length);
     
     setText(before + `![${contents}]()` + after);
-    setTag(after.length + 1);
+    setCursor((before + `![${contents}](`).length);
   }
 
   useEffect(() => {
-    if(tag != -1){
+    if(cursor !== -1){
       textareaRef.current.focus();
-      textareaRef.current.selectionStart = textareaRef.current.selectionEnd = text.length - tag;
-      setTag(-1);
+      textareaRef.current.selectionStart = textareaRef.current.selectionEnd = cursor;
+      setCursor(-1);
     }
-  }, [tag]);
+  }, [cursor]);
 
   useEffect(() => {
     setStart(textareaRef.current.selectionStart);

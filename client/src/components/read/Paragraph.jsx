@@ -15,7 +15,7 @@ const Paragraph = (props) => {
 
 
   const onClickHide = (event) => {
-    if(event.target.innerHTML != "[편집]"){
+    if(event.target.innerHTML !== "[편집]"){
       setHide(!hide);
     }
   };
