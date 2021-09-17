@@ -1,12 +1,9 @@
 import redis from "redis";
+import dotenv from "dotenv";
+dotenv.config();
 
-// const redisClient = redis.createClient(proces.env.REDIS_PORT);
-const redisClient = redis.createClient({
-  host: "localhost",
-  port: 6379,
-  db: 0,
-  password: "1q2w3e4r!@",
-});
+const redisPort = JSON.parse(process.env.REDIS_PORT);
+const redisClient = redis.createClient(redisPort);
 
 const set = (key, value) => {
   //   redisClient.set(key, JSON.stringify(value));
