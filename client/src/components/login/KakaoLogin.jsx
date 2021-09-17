@@ -4,7 +4,7 @@ import KaKaoLogin from "react-kakao-login";
 
 const { KAKAO_API_KEY } = process.env;
 
-const KakaoLogin = function () {
+const KakaoLogin = () => {
   const [token, setToken] = useState("");
   const onKakaoSucess = (res) => {
     const { profile } = res;
@@ -33,16 +33,13 @@ const KakaoLogin = function () {
       });
   };
   return (
-    <>
-      <KaKaoLogin
-        token={KAKAO_API_KEY}
-        onSuccess={onKakaoSucess}
-        onFail={console.error}
-        onLogout={console.info}
-        // getProfile={true}
-      />
-      <button onClick={checkVerify}></button>
-    </>
+    <KaKaoLogin
+      token={KAKAO_API_KEY}
+      onSuccess={onKakaoSucess}
+      onFail={console.error}
+      onLogout={console.info}
+      // getProfile={true}
+    />
   );
 };
 
