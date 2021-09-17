@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import KaKaoLogin from "react-kakao-login";
 
 const { KAKAO_API_KEY } = process.env;
 
-const KakaoLogin = () => {
-  const [token, setToken] = useState("");
+const KakaoLogin = ({ logOnHandler }) => {
+  // useEffect(() => {
+  //   window.Kakao.init(KAKAO_API_KEY);
+  // }, []);
+  const [token, setToken] = useState(null);
   const onKakaoSucess = (res) => {
     const { profile } = res;
     const { access_token } = res.response;
@@ -16,8 +19,9 @@ const KakaoLogin = () => {
         social: { kakao: { id: profile.id, accessToken: access_token } },
       })
       .then((res) => {
-        console.log(res.data.token);
+        console.log(res.data);
         setToken(res.data.token);
+        logOnHandler(res.data.userInfo);
       });
   };
 

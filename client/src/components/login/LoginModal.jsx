@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 import KakaoLogin from "./KakaoLogin";
-const LoginModal = ({ isOpen, onCloseHandler }) => {
+const LoginModal = ({ isOpen, logOnHandler, onCloseHandler }) => {
   return isOpen ? (
     <Container>
       <ContentsContainer>
         <CloseButton onClick={onCloseHandler}>&times;</CloseButton>
         <Title>내친소 로그인</Title>
         <LoginButtonContainer>
-          <KakaoLogin />
+          <KakaoLogin logOnHandler={logOnHandler} />
         </LoginButtonContainer>
       </ContentsContainer>
     </Container>
@@ -44,7 +44,7 @@ const CloseButton = styled.a`
   }
 `;
 
-const Title = styled.text`
+const Title = styled.p`
   text-align: center;
 `;
 

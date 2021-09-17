@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers["x-access-token"] || req.query.token;
-  console.log(token);
   if (!token) {
     return res.status(403).json({
       success: false,
@@ -18,7 +17,6 @@ const authMiddleware = (req, res, next) => {
   });
 
   const onError = (error) => {
-    console.log(error.message);
     res.status(403).json({
       success: false,
       message: error.message,

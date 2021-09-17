@@ -3,7 +3,14 @@ import styled from "styled-components";
 
 import { LoginModal } from "../login";
 const Header = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const logOnHandler = (user) => {
+    setIsLogin(true);
+    setUserInfo(user);
+    closeLoginModal();
+  };
   const openLoginModal = () => {
     setIsOpen(true);
   };
@@ -23,8 +30,16 @@ const Header = () => {
               <Anchor>최근 변경</Anchor>
             </Li>
           </Ul>
-          <LoginButton onClick={openLoginModal}>로그인</LoginButton>
-          <LoginModal isOpen={isOpen} onCloseHandler={closeLoginModal} />
+          {isLogin && userInfo ? (
+            <LoginButton>{userInfo.name}</LoginButton>
+          ) : (
+            <LoginButton onClick={openLoginModal}>로그인</LoginButton>
+          )}
+          <LoginModal
+            isOpen={isOpen}
+            logOnHandler={logOnHandler}
+            onCloseHandler={closeLoginModal}
+          />
         </Nav>
       </StyledHeader>
     </Container>

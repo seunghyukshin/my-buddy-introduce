@@ -10,56 +10,46 @@ import User from "../../models/user.js";
         name,
         email,
         social,
-        friends,
-        contents
     }
 */
 
 const login = (req, res) => {
-  const { name, email, social, friends } = req.body;
+  const { name, email, social } = req.body;
+  let userData = null;
   const secret = req.app.get("jwt-secret");
   const accessOptions = JSON.parse(process.env.ACCESS_OPTIONS);
   const refreshOptions = JSON.parse(process.env.REFRESH_OPTIONS);
   const checkId = (user) => {
     if (user) {
-      console.log("a");
+      userData = user;
       return User.updateToken(user, social);
     } else {
-      console.log("b");
       return findByEmail(user);
     }
   };
 
   const findByEmail = (user) => {
     if (!email) {
-      console.log("클라이언트로부터 받아온 이메일이 존재하지 않습니다.");
-      // throw Error("클라이언트로부터 받아온 이메일이 존재하지 않습니다.")
-      // go create
       return create();
     } else {
-      console.log("c");
       return User.findOneByUserEmail(email).then(checkEmail);
     }
   };
 
   const checkEmail = (user) => {
     if (user) {
-      console.log("d");
+      userData = user;
       return User.updateAnotherSocial(user, social);
     } else {
-      // go create
-      console.log("e");
-      return create();
+      return create(user);
     }
   };
 
   const create = () => {
-    console.log("f");
-    return User.create(name, email, social, friends);
+    return User.create(name, email, social);
   };
 
-  const sign = (user) => {
-    const { name, email, social } = user;
+  const sign = () => {
     const payload = {
       name,
       email,
@@ -77,13 +67,12 @@ const login = (req, res) => {
   };
 
   const respond = (accessToken) => {
-    // const refreshToken = refresh();
     const refreshToken = jwt.sign({}, secret, refreshOptions);
     redisClient.set(name, refreshToken);
 
-    console.log("Login success");
     res.json({
       msg: "login success",
+      userInfo: userData,
       token: {
         accessToken,
         refreshToken,
