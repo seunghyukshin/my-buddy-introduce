@@ -1,21 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
+import { LoginModal } from "../login";
 const Header = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const logOnHandler = (user) => {
+    setIsLogin(true);
+    setUserInfo(user);
+    closeLoginModal();
+  };
+  const openLoginModal = () => {
+    setIsOpen(true);
+  };
+  const closeLoginModal = () => {
+    setIsOpen(false);
+  };
   return (
     <Container>
       <StyledHeader>
         <Nav>
           <Home>내 친 소</Home>
           <Ul>
-            <Li><Anchor>랭킹</Anchor></Li>
-            <Li><Anchor>최근 변경</Anchor></Li>
+            <Li>
+              <Anchor>랭킹</Anchor>
+            </Li>
+            <Li>
+              <Anchor>최근 변경</Anchor>
+            </Li>
           </Ul>
-          <LoginButton>로그인</LoginButton>
+          {isLogin && userInfo ? (
+            <LoginButton>{userInfo.name}</LoginButton>
+          ) : (
+            <LoginButton onClick={openLoginModal}>로그인</LoginButton>
+          )}
+          <LoginModal
+            isOpen={isOpen}
+            logOnHandler={logOnHandler}
+            onCloseHandler={closeLoginModal}
+          />
         </Nav>
       </StyledHeader>
     </Container>
-  )
+  );
 };
 
 const Container = styled.div`
@@ -47,8 +75,8 @@ const Home = styled.a`
   padding: 0 20px 0 20px;
   display: inline;
 
-  &:hover{
-    cursor:pointer;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -61,9 +89,9 @@ const Anchor = styled.a`
   padding: 0 20px 0 20px;
   display: inline;
 
-  &:hover{
+  &:hover {
     background-color: rgba(255, 255, 255, 0.226);
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 
@@ -76,8 +104,8 @@ const LoginButton = styled.a`
   padding: 0 20px 0 20px;
   display: inline;
 
-  &:hover{
-    cursor:pointer;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -86,7 +114,7 @@ const Ul = styled.ul`
 `;
 
 const Li = styled.li`
-	list-style: none;
+  list-style: none;
 `;
 
 export default Header;

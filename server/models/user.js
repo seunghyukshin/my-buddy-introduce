@@ -26,23 +26,35 @@ userSchema.statics.create = function (name, email, social, friends) {
     friends,
   });
 
-  // promise
   return user.save();
 };
 
-userSchema.statics.findOneByUsername = function (userName) {
+userSchema.statics.updateToken = function (user, social) {
+  return user
+    .updateOne({
+      "social.kakao.accessToken": social.kakao.accessToken,
+    })
+    .exec();
+};
+
+userSchema.statics.updateAnotherSocial = function (user, social) {
+  return user
+    .updateOne({
+      "social.kakao": social.kakao,
+    })
+    .exec();
+};
+
+userSchema.statics.findOneByUserEmail = function (email) {
   return this.findOne({
-    userName,
+    email,
   }).exec();
 };
 
-userSchema.methods.verify = function (password) {
-  return this.password === password;
-};
-
-userSchema.methods.assignAdmin = function () {
-  this.admin = true;
-  return this.save();
+userSchema.statics.findOneBySocialId = function (social) {
+  return this.findOne({
+    "social.kakao.id": social.kakao.id,
+  }).exec();
 };
 
 export default mongoose.model("User", userSchema);

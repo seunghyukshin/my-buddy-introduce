@@ -1,18 +1,24 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
-import bodyParser from "body-parser";
 const app = express();
 app.use(express.json());
 
-const { PORT, MONGO_URI } = process.env;
+/*  .env  */
+import dotenv from "dotenv";
+dotenv.config();
+const { PORT, MONGO_URI, SECRET } = process.env;
+
+/* console middleware*/
+import morgan from "morgan";
+app.use(morgan("dev"));
+
+/* set jwt secret key */
+app.set("jwt-secret", SECRET);
+
 /* connect db */
 import mongoose from "mongoose";
 const db = mongoose.connection;
 db.on("error", console.error);
 db.once("open", function () {
-  // CONNECTED TO MONGODB SERVER
   console.log("Connected to mongod server");
 });
 
