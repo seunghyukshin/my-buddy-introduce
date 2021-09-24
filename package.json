@@ -2,10 +2,10 @@
   "name": "my-buddy-introduce",
   "version": "0.1.0",
   "scripts": {
-    "client": "cd client && npm start",
-    "server": "cd server && npm start",
-    "build:client": "cd client && npm run build",
-    "build:server": "cd server && npm run build",
+    "dev-client": "cd client && npm start",
+    "dev-server": "cd server && npm start",
+    "build-client": "cd client && npm run build",
+    "build-server": "cd server && npm run build",
     "build": "npm run build:client && npm run build:server",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
