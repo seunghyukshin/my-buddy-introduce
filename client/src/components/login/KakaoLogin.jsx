@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -6,8 +6,9 @@ import LoginButtonImage from "./../../constants/image/logo/kakao_logo.png";
 // import { login } from "../../utils/kakaoApi";
 const { Kakao } = window;
 
-const KakaoLogin = ({ logOnHandler }) => {
-  const onRequestSuccess = (res) => {
+// TODO : utils/kakaoApi.js로 분리
+const KakaoLogin = ({ onLoginSuccess }) => {
+  const handleKakaoRequestSuccess = (res) => {
     console.log(res);
     const id = res.id;
     const email = res.kakao_account.email;
@@ -21,25 +22,24 @@ const KakaoLogin = ({ logOnHandler }) => {
       })
       .then((res) => {
         console.log(res.data);
-        logOnHandler(res.data.userInfo);
+        onLoginSuccess(res.data.userInfo);
       });
   };
 
-  const onLoginSucess = () => {
+  const handleKakaoLoginSuccess = () => {
     Kakao.API.request({
-      url: "/v2/user/me", //계정 정보를 가져오는 request url
-      success: (res) => onRequestSuccess(res),
+      url: "/v2/user/me",
+      success: (res) => handleKakaoRequestSuccess(res),
       fail: function (error) {
         console.log(error);
       },
     });
   };
 
-  // TODO : token 저장
-  const onClickHandler = () => {
+  const handleClickButton = () => {
     Kakao.Auth.login({
       success: (res) => {
-        onLoginSucess();
+        handleKakaoLoginSuccess();
       },
       fail: (err) => {
         console.error(err);
@@ -64,7 +64,7 @@ const KakaoLogin = ({ logOnHandler }) => {
   return (
     <Container>
       <ButtonImage src={LoginButtonImage}></ButtonImage>
-      <ButtonText onClick={onClickHandler}>카카오톡으로 시작하기</ButtonText>
+      <ButtonText onClick={handleClickButton}>카카오톡으로 시작하기</ButtonText>
     </Container>
   );
 };

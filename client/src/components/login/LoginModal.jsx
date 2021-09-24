@@ -3,14 +3,14 @@ import styled from "styled-components";
 
 import KakaoLogin from "./KakaoLogin";
 import FacebookLogin from "./FacebookLogin";
-const LoginModal = ({ isOpen, logOnHandler, onCloseHandler }) => {
+const LoginModal = ({ isOpen, onLoginSuccess, onCloseModal }) => {
   return isOpen ? (
     <Container>
       <ContentsContainer>
-        <CloseButton onClick={onCloseHandler}>&times;</CloseButton>
+        <CloseButton onClick={onCloseModal}>&times;</CloseButton>
         <Title>내친소 로그인</Title>
         <LoginButtonContainer>
-          <KakaoLogin logOnHandler={logOnHandler} />
+          <KakaoLogin onLoginSuccess={onLoginSuccess} />
           <FacebookLogin />
         </LoginButtonContainer>
       </ContentsContainer>

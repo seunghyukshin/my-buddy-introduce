@@ -6,16 +6,23 @@ const Header = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isLogin, setIsLogin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const logOnHandler = (user) => {
+  const handleLoginSuccess = (user) => {
     setIsLogin(true);
     setUserInfo(user);
-    closeLoginModal();
+    handleCloseModal();
   };
-  const openLoginModal = () => {
+  const handleOpenModal = () => {
     setIsOpen(true);
   };
-  const closeLoginModal = () => {
+  const handleCloseModal = () => {
     setIsOpen(false);
+  };
+
+  // navigation bar 구현하기
+  const handleProfileClick = () => {
+    if (window.Kakao.Auth.getAccessToken()) {
+      console.log("로그인 상태입니다!");
+    }
   };
   return (
     <Container>
@@ -31,17 +38,17 @@ const Header = () => {
             </Li>
           </Ul>
           {isLogin && userInfo ? (
-            <ProfileContainer>
+            <ProfileContainer onClick={handleProfileClick}>
               <ProfileImage src={userInfo.profileImage}></ProfileImage>
               <ProfileName>{userInfo.name}</ProfileName>
             </ProfileContainer>
           ) : (
-            <LoginButton onClick={openLoginModal}>로그인</LoginButton>
+            <LoginButton onClick={handleOpenModal}>로그인</LoginButton>
           )}
           <LoginModal
             isOpen={isOpen}
-            logOnHandler={logOnHandler}
-            onCloseHandler={closeLoginModal}
+            onLoginSuccess={handleLoginSuccess}
+            onCloseModal={handleCloseModal}
           />
         </Nav>
       </StyledHeader>
@@ -118,8 +125,6 @@ const ProfileName = styled.p`
   color: white;
   display: inline;
   padding-left: 10px;
-  outline: none;
-  text-decoration: none;
 `;
 
 const LoginButton = styled.a`

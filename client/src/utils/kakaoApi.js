@@ -1,4 +1,3 @@
-const { KAKAO_API_KEY } = process.env;
 const { Kakao } = window;
 
 const login = () => {
