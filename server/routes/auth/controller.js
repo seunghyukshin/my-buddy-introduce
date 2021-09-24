@@ -9,12 +9,13 @@ import User from "../../models/user.js";
     {
         name,
         email,
+        profileImage,
         social,
     }
 */
 
 const login = (req, res) => {
-  const { name, email, social } = req.body;
+  const { name, email, profileImage, social } = req.body;
   let userData = null;
   const secret = req.app.get("jwt-secret");
   const accessOptions = JSON.parse(process.env.ACCESS_OPTIONS);
@@ -46,7 +47,7 @@ const login = (req, res) => {
   };
 
   const create = () => {
-    return User.create(name, email, social);
+    return User.create(name, email, profileImage, social);
   };
 
   const sign = () => {

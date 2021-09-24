@@ -4,34 +4,43 @@ import axios from "axios";
 
 import LoginButtonImage from "./../../constants/image/logo/kakao_logo.png";
 // import { login } from "../../utils/kakaoApi";
-const { KAKAO_API_KEY } = process.env;
 const { Kakao } = window;
 
 const KakaoLogin = ({ logOnHandler }) => {
-  // useEffect(() => {
-  //   window.Kakao.init(KAKAO_API_KEY);
-  // }, []);
-  const [token, setToken] = useState(null);
-  const onKakaoSucess = (res) => {
+  const onRequestSuccess = (res) => {
     console.log(res);
-    const { profile } = res;
-    const { access_token } = res.response;
+    const id = res.id;
+    const email = res.kakao_account.email;
+    const { profile } = res.kakao_account;
     axios
       .post("/api/auth/login", {
-        name: profile.properties.nickname,
-        // email: "abc@naver.com",
-        social: { kakao: { id: profile.id, accessToken: access_token } },
+        name: profile.nickname,
+        email,
+        profileImage: profile.profile_image_url,
+        social: { kakao: { id } },
       })
       .then((res) => {
         console.log(res.data);
-        setToken(res.data.token);
         logOnHandler(res.data.userInfo);
       });
   };
 
+  const onLoginSucess = () => {
+    Kakao.API.request({
+      url: "/v2/user/me", //계정 정보를 가져오는 request url
+      success: (res) => onRequestSuccess(res),
+      fail: function (error) {
+        console.log(error);
+      },
+    });
+  };
+
+  // TODO : token 저장
   const onClickHandler = () => {
     Kakao.Auth.login({
-      success: (res) => onKakaoSucess(res),
+      success: (res) => {
+        onLoginSucess();
+      },
       fail: (err) => {
         console.error(err);
       },
@@ -40,17 +49,17 @@ const KakaoLogin = ({ logOnHandler }) => {
     });
   };
 
-  const checkVerify = () => {
-    axios
-      .get("/api/auth/verify", {
-        headers: {
-          "x-access-token": token.accessToken,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      });
-  };
+  // const checkVerify = () => {
+  //   axios
+  //     .get("/api/auth/verify", {
+  //       headers: {
+  //         "x-access-token": token.accessToken,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //     });
+  // };
 
   return (
     <Container>

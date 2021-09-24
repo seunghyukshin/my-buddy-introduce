@@ -31,7 +31,10 @@ const Header = () => {
             </Li>
           </Ul>
           {isLogin && userInfo ? (
-            <LoginButton>{userInfo.name}</LoginButton>
+            <ProfileContainer>
+              <ProfileImage src={userInfo.profileImage}></ProfileImage>
+              <ProfileName>{userInfo.name}</ProfileName>
+            </ProfileContainer>
           ) : (
             <LoginButton onClick={openLoginModal}>로그인</LoginButton>
           )}
@@ -93,6 +96,30 @@ const Anchor = styled.a`
     background-color: rgba(255, 255, 255, 0.226);
     cursor: pointer;
   }
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  float: right;
+
+  margin-right: 40px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ProfileImage = styled.img`
+  width: 30px;
+  heigth: 30px;
+  border-radius: 10px;
+`;
+
+const ProfileName = styled.p`
+  color: white;
+  display: inline;
+  padding-left: 10px;
+  outline: none;
+  text-decoration: none;
 `;
 
 const LoginButton = styled.a`
