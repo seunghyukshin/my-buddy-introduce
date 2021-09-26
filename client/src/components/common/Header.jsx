@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { LoginModal } from "../login";
+import MenuBar from "./MenuBar";
 const Header = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isLogin, setIsLogin] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isToggle, setIsToggle] = useState(false);
 
   const handleLoginSuccess = (user) => {
     setIsLogin(true);
@@ -20,10 +20,6 @@ const Header = () => {
     setIsOpenModal(false);
   };
 
-  // navigation bar 구현하기
-  const handleProfileClick = () => {
-    setIsToggle(!isToggle);
-  };
   return (
     <Container>
       <StyledHeader>
@@ -37,12 +33,10 @@ const Header = () => {
               <Anchor>최근 변경</Anchor>
             </Li>
           </Ul>
-          {isToggle ? <></> : <></>}
           {isLogin && userInfo ? (
-            <ProfileContainer onClick={handleProfileClick}>
-              <ProfileImage src={userInfo.profileImage}></ProfileImage>
-              <ProfileName>{userInfo.name}</ProfileName>
-            </ProfileContainer>
+            <MenuBarContainer>
+              <MenuBar img={userInfo.profileImage} />
+            </MenuBarContainer>
           ) : (
             <LoginButton onClick={handleOpenModal}>로그인</LoginButton>
           )}
@@ -106,27 +100,26 @@ const Anchor = styled.a`
   }
 `;
 
-const ProfileContainer = styled.div`
+const MenuBarContainer = styled.div`
+  height: 100%;
   display: flex;
   float: right;
 
   margin-right: 40px;
   cursor: pointer;
-  justify-content: center;
-  align-items: center;
 `;
 
-const ProfileImage = styled.img`
-  width: 30px;
-  heigth: 30px;
-  border-radius: 10px;
-`;
+// const ProfileImage = styled.img`
+//   width: 30px;
+//   heigth: 30px;
+//   border-radius: 10px;
+// `;
 
-const ProfileName = styled.p`
-  color: white;
-  display: inline;
-  padding-left: 10px;
-`;
+// const ProfileName = styled.p`
+//   color: white;
+//   display: inline;
+//   padding-left: 10px;
+// `;
 
 const LoginButton = styled.a`
   color: white;
