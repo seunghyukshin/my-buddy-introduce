@@ -105,8 +105,10 @@ const MenuBarContainer = styled.div`
   display: flex;
   float: right;
 
+  margin-top: 5px;
   margin-right: 40px;
   cursor: pointer;
+  display: inline;
 `;
 
 // const ProfileImage = styled.img`

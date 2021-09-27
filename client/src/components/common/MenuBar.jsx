@@ -5,16 +5,15 @@ const DropdownMenu = () => {
   const DropdownItem = (props) => {
     return (
       <MenuItem>
-        <IconButton>{props.leftIcon}</IconButton>
-        {props.children}
+        <MenuName>{props.children}</MenuName>
       </MenuItem>
     );
   };
 
   return (
     <DropdownContainer>
-      <DropdownItem>신승혁</DropdownItem>
-      <DropdownItem leftIcon="🔥">로그아웃</DropdownItem>
+      <DropdownItem>프로필 변경</DropdownItem>
+      <DropdownItem>로그아웃</DropdownItem>
     </DropdownContainer>
   );
 };
@@ -55,45 +54,35 @@ const ProfileImage = styled.img`
   justify-content: center;
 `;
 
-const IconButton = styled.a`
-  width: 12px;
-  height: 12px
-  background-color: #484a4d;
-  border-radius: 50%;
-  padding: 5px;
-  margin: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: filter 300ms;
-
-  margin-right: 0.5rem;
-`;
-
 const DropdownContainer = styled.div`
   position: absolute;
-  top: 38px;
-  width: 200px;
+  top: 36px;
+  width: 140px;
   transform: translateX(-45%);
 
   background-color: #008275;
   border: 1px solid #474a4d;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 8px;
   overflow: hidden;
   transition: height 500ms ease;
 `;
 
 const MenuItem = styled.a`
-  height: 50px;
   display: flex;
   align-items: center;
   border-radius: 8px;
   transition: background 500ms;
-  padding: 0.5rem;
+  padding: 1px;
+
   &:hover {
     background-color: #525357;
   }
+`;
+
+const MenuName = styled.a`
+  font-size: 12px;
+  color: white;
 `;
 
 export default MenuBar;
