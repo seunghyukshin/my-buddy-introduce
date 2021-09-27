@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 
+/* access token 검사 */
 const authMiddleware = (req, res, next) => {
   const token = req.headers["x-access-token"] || req.query.token;
   if (!token) {
