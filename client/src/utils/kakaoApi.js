@@ -13,4 +13,12 @@ const login = () => {
 // TODO : Redux 적용 후 store에 res 저장
 const loginSuccess = () => {};
 
-export { login };
+const hasToken = () => {
+  if (Kakao.Auth.getAccessToken()) return true;
+  return false;
+};
+
+const logout = () => {
+  Kakao.Auth.logout();
+};
+export { hasToken, logout };

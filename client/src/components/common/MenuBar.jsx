@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const DropdownMenu = () => {
-  const DropdownItem = (props) => {
-    return (
-      <MenuItem>
-        <MenuName>{props.children}</MenuName>
-      </MenuItem>
-    );
-  };
-
+const DropdownMenu = (props) => {
   return (
     <DropdownContainer>
-      <DropdownItem>프로필 변경</DropdownItem>
-      <DropdownItem>로그아웃</DropdownItem>
+      <DropdownItem>
+        <ItemName>프로필 변경</ItemName>
+      </DropdownItem>
+
+      <DropdownItem onClick={props.onClickLogout}>
+        <ItemName>로그아웃</ItemName>
+      </DropdownItem>
     </DropdownContainer>
   );
 };
@@ -32,7 +29,7 @@ const NavItem = (props) => {
 const MenuBar = (props) => {
   return (
     <NavItem img={props.img}>
-      <DropdownMenu></DropdownMenu>
+      <DropdownMenu onClickLogout={props.onClickLogout}></DropdownMenu>
     </NavItem>
   );
 };
@@ -68,7 +65,7 @@ const DropdownContainer = styled.div`
   transition: height 500ms ease;
 `;
 
-const MenuItem = styled.a`
+const DropdownItem = styled.div`
   display: flex;
   align-items: center;
   border-radius: 8px;
@@ -80,7 +77,7 @@ const MenuItem = styled.a`
   }
 `;
 
-const MenuName = styled.a`
+const ItemName = styled.a`
   font-size: 12px;
   color: white;
 `;

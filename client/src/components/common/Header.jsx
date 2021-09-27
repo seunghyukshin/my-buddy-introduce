@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { LoginModal } from "../login";
 import MenuBar from "./MenuBar";
+import * as kakao from "../../utils/KakaoApi";
+
 const Header = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isLogin, setIsLogin] = useState(false);
@@ -20,6 +22,17 @@ const Header = () => {
     setIsOpenModal(false);
   };
 
+  // TODO : 필요시 reload
+  const handleClickLogout = () => {
+    setIsLogin(false);
+    setUserInfo(null);
+
+    if (kakao.hasToken()) {
+      kakao.logout();
+    }
+    // if (fbApi.hasToken()) fbApi.logout();
+  };
+
   return (
     <Container>
       <StyledHeader>
@@ -35,7 +48,10 @@ const Header = () => {
           </Ul>
           {isLogin && userInfo ? (
             <MenuBarContainer>
-              <MenuBar img={userInfo.profileImage} />
+              <MenuBar
+                img={userInfo.profileImage}
+                onClickLogout={handleClickLogout}
+              />
             </MenuBarContainer>
           ) : (
             <LoginButton onClick={handleOpenModal}>로그인</LoginButton>
