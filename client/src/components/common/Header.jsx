@@ -1,18 +1,21 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { LoginModal } from "../login";
 import MenuBar from "./MenuBar";
 import * as kakao from "../../utils/KakaoApi";
+import { login, logout } from "../../reducers/User";
 
 const Header = () => {
-  const [userInfo, setUserInfo] = useState(null);
-  const [isLogin, setIsLogin] = useState(false);
+  const userInfo = useSelector((state) => state.userInfo);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
+  const dispatchUserInfo = useDispatch();
+
+  // TO DO : 로그인 성공 시, 로그인 글자 안바뀌는 issue
   const handleLoginSuccess = (user) => {
-    setIsLogin(true);
-    setUserInfo(user);
+    dispatchUserInfo(login(user));
     handleCloseModal();
   };
   const handleOpenModal = () => {
@@ -24,8 +27,7 @@ const Header = () => {
 
   // TODO : 필요시 reload
   const handleClickLogout = () => {
-    setIsLogin(false);
-    setUserInfo(null);
+    dispatchUserInfo(logout());
 
     if (kakao.hasToken()) {
       kakao.logout();
@@ -46,12 +48,9 @@ const Header = () => {
               <Anchor>최근 변경</Anchor>
             </Li>
           </Ul>
-          {isLogin && userInfo ? (
+          {userInfo ? (
             <MenuBarContainer>
-              <MenuBar
-                img={userInfo.profileImage}
-                onClickLogout={handleClickLogout}
-              />
+              <MenuBar onClickLogout={handleClickLogout} />
             </MenuBarContainer>
           ) : (
             <LoginButton onClick={handleOpenModal}>로그인</LoginButton>

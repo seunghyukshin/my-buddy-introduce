@@ -1,65 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 import LoginButtonImage from "./../../constants/image/logo/kakao_logo.png";
-// import { login } from "../../utils/kakaoApi";
-const { Kakao } = window;
+import * as kakao from "../../utils/KakaoApi";
+import * as rest from "../../utils/RestApi";
 
-// TODO : utils/kakaoApi.js로 분리
 const KakaoLogin = ({ onLoginSuccess }) => {
   const handleKakaoRequestSuccess = (res) => {
-    console.log(res);
     const id = res.id;
     const email = res.kakao_account.email;
     const { profile } = res.kakao_account;
-    axios
-      .post("/api/auth/login", {
-        name: profile.nickname,
-        email,
-        profileImage: profile.profile_image_url,
-        social: { kakao: { id } },
-      })
-      .then((res) => {
-        console.log(res.data);
-        onLoginSuccess(res.data.userInfo);
-      });
+
+    rest.login(id, email, profile).then((data) => {
+      onLoginSuccess(data.userInfo);
+    });
   };
 
   const handleKakaoLoginSuccess = () => {
-    Kakao.API.request({
-      url: "/v2/user/me",
-      success: (res) => handleKakaoRequestSuccess(res),
-      fail: function (error) {
-        console.log(error);
-      },
-    });
+    kakao.requestUserInfo(handleKakaoRequestSuccess);
   };
 
   const handleClickButton = () => {
-    Kakao.Auth.login({
-      success: (res) => {
-        handleKakaoLoginSuccess();
-      },
-      fail: (err) => {
-        console.error(err);
-      },
-      scope:
-        "profile_nickname,profile_image,account_email,friends,talk_message",
-    });
+    kakao.login(handleKakaoLoginSuccess);
   };
-
-  // const checkVerify = () => {
-  //   axios
-  //     .get("/api/auth/verify", {
-  //       headers: {
-  //         "x-access-token": token.accessToken,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // };
 
   return (
     <Container>

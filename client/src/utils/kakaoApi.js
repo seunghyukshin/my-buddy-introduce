@@ -1,8 +1,8 @@
 const { Kakao } = window;
 
-const login = () => {
+const login = (callback) => {
   Kakao.Auth.login({
-    success: (res) => loginSuccess(res),
+    success: (res) => callback(res),
     fail: (err) => {
       console.error(err);
     },
@@ -21,4 +21,14 @@ const hasToken = () => {
 const logout = () => {
   Kakao.Auth.logout();
 };
-export { hasToken, logout };
+
+const requestUserInfo = (callback) => {
+  Kakao.API.request({
+    url: "/v2/user/me",
+    success: (res) => callback(res),
+    fail: function (error) {
+      console.log(error);
+    },
+  });
+};
+export { login, hasToken, logout, requestUserInfo };

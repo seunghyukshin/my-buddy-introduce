@@ -10,5 +10,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-redux": "7.2.5",
+    "redux": "4.1.1"
+  }
 }

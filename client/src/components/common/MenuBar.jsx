@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const DropdownMenu = (props) => {
@@ -16,11 +17,13 @@ const DropdownMenu = (props) => {
 };
 
 const NavItem = (props) => {
+  // TO DO : Dropdown Menu 밖 클릭 시, setOpen(false);
   const [open, setOpen] = useState(false);
+  const { profileImage } = useSelector((state) => state.userInfo);
 
   return (
     <NavItemContainer>
-      <ProfileImage src={props.img} onClick={() => setOpen(!open)} />
+      <ProfileImage src={profileImage} onClick={() => setOpen(!open)} />
       {open && props.children}
     </NavItemContainer>
   );
@@ -28,7 +31,7 @@ const NavItem = (props) => {
 
 const MenuBar = (props) => {
   return (
-    <NavItem img={props.img}>
+    <NavItem>
       <DropdownMenu onClickLogout={props.onClickLogout}></DropdownMenu>
     </NavItem>
   );
