@@ -6,6 +6,7 @@ const verifyRefresh = async (token, username) => {
   const FAIL_RESULT = { ok: false };
   try {
     const data = await getAsync(username);
+    // TODO : exp를 먼저 조사하여 만료되었는지 확인
     if (token === data) {
       return SUCCESS_RESULT;
     } else {
