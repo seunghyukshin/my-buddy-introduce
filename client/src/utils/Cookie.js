@@ -8,6 +8,7 @@ const TOKEN_NAME = {
   refreshToken: process.env.REACT_APP_RT_COOKIE_NAME,
 };
 
+// TODO : secure samesite option setting
 const cookies = new Cookies();
 const setCookie = (name, value, option) => {
   cookies.set(TOKEN_NAME[name], value, {
