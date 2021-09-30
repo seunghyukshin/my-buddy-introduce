@@ -10,9 +10,6 @@ const login = (callback) => {
   });
 };
 
-// TODO : Redux 적용 후 store에 res 저장
-const loginSuccess = () => {};
-
 const hasToken = () => {
   if (Kakao.Auth.getAccessToken()) return true;
   return false;

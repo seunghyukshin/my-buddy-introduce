@@ -12,7 +12,7 @@ const KakaoLogin = ({ onLoginSuccess }) => {
     const { profile } = res.kakao_account;
 
     rest.login(id, email, profile).then((data) => {
-      onLoginSuccess(data.userInfo);
+      onLoginSuccess(data);
     });
   };
 
@@ -25,9 +25,9 @@ const KakaoLogin = ({ onLoginSuccess }) => {
   };
 
   return (
-    <Container>
+    <Container onClick={handleClickButton}>
       <ButtonImage src={LoginButtonImage}></ButtonImage>
-      <ButtonText onClick={handleClickButton}>카카오톡으로 시작하기</ButtonText>
+      <ButtonText>카카오톡으로 시작하기</ButtonText>
     </Container>
   );
 };

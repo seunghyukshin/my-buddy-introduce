@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { LoginModal } from "../login";
 import MenuBar from "./MenuBar";
+import * as cookie from "../../utils/Cookie";
 import * as kakao from "../../utils/KakaoApi";
 import { login, logout } from "../../reducers/User";
 
@@ -13,9 +14,12 @@ const Header = () => {
 
   const dispatchUserInfo = useDispatch();
 
-  // TO DO : 로그인 성공 시, 로그인 글자 안바뀌는 issue
-  const handleLoginSuccess = (user) => {
-    dispatchUserInfo(login(user));
+  const handleLoginSuccess = (data) => {
+    const { accessToken, refreshToken } = data.token;
+    cookie.setCookie("accessToken", accessToken);
+    cookie.setCookie("refreshToken", refreshToken);
+
+    dispatchUserInfo(login(data.userInfo));
     handleCloseModal();
   };
   const handleOpenModal = () => {
@@ -27,6 +31,9 @@ const Header = () => {
 
   // TODO : 필요시 reload
   const handleClickLogout = () => {
+    cookie.removeCookie("accessToken");
+    cookie.removeCookie("refreshToken");
+
     dispatchUserInfo(logout());
 
     if (kakao.hasToken()) {
