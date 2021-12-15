@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 import KakaoLogin from "./KakaoLogin";
-const LoginModal = ({ isOpen, logOnHandler, onCloseHandler }) => {
+import FacebookLogin from "./FacebookLogin";
+const LoginModal = ({ isOpen, onLoginSuccess, onCloseModal }) => {
   return isOpen ? (
     <Container>
       <ContentsContainer>
-        <CloseButton onClick={onCloseHandler}>&times;</CloseButton>
+        <CloseButton onClick={onCloseModal}>&times;</CloseButton>
         <Title>내친소 로그인</Title>
         <LoginButtonContainer>
-          <KakaoLogin logOnHandler={logOnHandler} />
+          <KakaoLogin onLoginSuccess={onLoginSuccess} />
+          <FacebookLogin />
         </LoginButtonContainer>
       </ContentsContainer>
     </Container>
@@ -30,18 +32,15 @@ const ContentsContainer = styled.div`
   flex-direction: column;
   background-color: white;
   box-sizing: border-box;
-  height: 480px;
   width: 400px;
-  margin: 6em auto;
+  margin: 9em auto;
   padding: 10px;
 `;
 
 const CloseButton = styled.a`
   line-height: 10px;
   margin-left: auto;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 
 const Title = styled.p`

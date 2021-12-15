@@ -1,50 +1,62 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import KaKaoLogin from "react-kakao-login";
+import React from "react";
+import styled from "styled-components";
 
-const { KAKAO_API_KEY } = process.env;
+import LoginButtonImage from "./../../constants/image/logo/kakao_logo.png";
+import * as kakao from "../../utils/KakaoApi";
+import * as rest from "../../utils/RestApi";
 
-const KakaoLogin = ({ logOnHandler }) => {
-  // useEffect(() => {
-  //   window.Kakao.init(KAKAO_API_KEY);
-  // }, []);
-  const [token, setToken] = useState(null);
-  const onKakaoSucess = (res) => {
-    const { profile } = res;
-    const { access_token } = res.response;
-    axios
-      .post("/api/auth/login", {
-        name: profile.properties.nickname,
-        // email: "abc@naver.com",
-        social: { kakao: { id: profile.id, accessToken: access_token } },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setToken(res.data.token);
-        logOnHandler(res.data.userInfo);
-      });
+const KakaoLogin = ({ onLoginSuccess }) => {
+  const handleKakaoRequestSuccess = (res) => {
+    const id = res.id;
+    const email = res.kakao_account.email;
+    const { profile } = res.kakao_account;
+
+    rest.login(id, email, profile).then((data) => {
+      onLoginSuccess(data);
+    });
   };
 
-  const checkVerify = () => {
-    axios
-      .get("/api/auth/verify", {
-        headers: {
-          "x-access-token": token.accessToken,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      });
+  const handleKakaoLoginSuccess = () => {
+    kakao.requestUserInfo(handleKakaoRequestSuccess);
   };
+
+  const handleClickButton = () => {
+    kakao.login(handleKakaoLoginSuccess);
+  };
+
   return (
-    <KaKaoLogin
-      token={KAKAO_API_KEY}
-      onSuccess={onKakaoSucess}
-      onFail={console.error}
-      onLogout={console.info}
-      // getProfile={true}
-    />
+    <Container onClick={handleClickButton}>
+      <ButtonImage src={LoginButtonImage}></ButtonImage>
+      <ButtonText>카카오톡으로 시작하기</ButtonText>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 280px;
+  height: 40px;
+  margin: 0 0 28px 0;
+  background-color: #fddc3f;
+  border-radius: 12px;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const ButtonImage = styled.img`
+  cursor: pointer;
+`;
+
+const ButtonText = styled.p`
+  display: inline;
+  margin: 0 auto;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000000 85%;
+`;
 
 export default KakaoLogin;

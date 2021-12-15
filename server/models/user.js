@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   name: String,
   email: String,
+  profileImage: String,
   social: {
     kakao: {
       id: Number,
@@ -18,10 +19,17 @@ const userSchema = new Schema({
   contents: {},
 });
 
-userSchema.statics.create = function (name, email, social, friends) {
+userSchema.statics.create = function (
+  name,
+  email,
+  profileImage,
+  social,
+  friends
+) {
   const user = new this({
     name,
     email,
+    profileImage,
     social,
     friends,
   });

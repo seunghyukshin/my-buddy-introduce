@@ -1,22 +1,47 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { LoginModal } from "../login";
+import MenuBar from "./MenuBar";
+import * as cookie from "../../utils/Cookie";
+import * as kakao from "../../utils/KakaoApi";
+import { login, logout } from "../../reducers/User";
+
 const Header = () => {
-  const [userInfo, setUserInfo] = useState(null);
-  const [isLogin, setIsLogin] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const logOnHandler = (user) => {
-    setIsLogin(true);
-    setUserInfo(user);
-    closeLoginModal();
+  const userInfo = useSelector((state) => state.userInfo);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const dispatchUserInfo = useDispatch();
+
+  const handleLoginSuccess = (data) => {
+    const { accessToken, refreshToken } = data.token;
+    cookie.setCookie("accessToken", accessToken);
+    cookie.setCookie("refreshToken", refreshToken);
+
+    dispatchUserInfo(login(data.userInfo));
+    handleCloseModal();
   };
-  const openLoginModal = () => {
-    setIsOpen(true);
+  const handleOpenModal = () => {
+    setIsOpenModal(true);
   };
-  const closeLoginModal = () => {
-    setIsOpen(false);
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
   };
+
+  // TODO : 필요시 reload
+  const handleClickLogout = () => {
+    cookie.removeCookie("accessToken");
+    cookie.removeCookie("refreshToken");
+
+    dispatchUserInfo(logout());
+
+    if (kakao.hasToken()) {
+      kakao.logout();
+    }
+    // if (fbApi.hasToken()) fbApi.logout();
+  };
+
   return (
     <Container>
       <StyledHeader>
@@ -30,15 +55,18 @@ const Header = () => {
               <Anchor>최근 변경</Anchor>
             </Li>
           </Ul>
-          {isLogin && userInfo ? (
-            <LoginButton>{userInfo.name}</LoginButton>
+          {userInfo ? (
+            <MenuBarContainer>
+              <MenuBar onClickLogout={handleClickLogout} />
+            </MenuBarContainer>
           ) : (
-            <LoginButton onClick={openLoginModal}>로그인</LoginButton>
+            <LoginButton onClick={handleOpenModal}>로그인</LoginButton>
           )}
           <LoginModal
-            isOpen={isOpen}
-            logOnHandler={logOnHandler}
-            onCloseHandler={closeLoginModal}
+            isOpen={isOpenModal}
+            onLoginSuccess={handleLoginSuccess}
+            onCloseModal={handleCloseModal}
+            
           />
         </Nav>
       </StyledHeader>
@@ -95,6 +123,29 @@ const Anchor = styled.a`
   }
 `;
 
+const MenuBarContainer = styled.div`
+  height: 100%;
+  display: flex;
+  float: right;
+
+  margin-top: 5px;
+  margin-right: 40px;
+  cursor: pointer;
+  display: inline;
+`;
+
+// const ProfileImage = styled.img`
+//   width: 30px;
+//   heigth: 30px;
+//   border-radius: 10px;
+// `;
+
+// const ProfileName = styled.p`
+//   color: white;
+//   display: inline;
+//   padding-left: 10px;
+// `;
+
 const LoginButton = styled.a`
   color: white;
   text-decoration: none;
@@ -106,6 +157,7 @@ const LoginButton = styled.a`
 
   &:hover {
     cursor: pointer;
+    filter: brightness(0.8);
   }
 `;
 

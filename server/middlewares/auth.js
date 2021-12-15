@@ -1,9 +1,14 @@
 import jwt from "jsonwebtoken";
 
+import cookieParser from "../utils/cookieParser.js";
+
+/* access token 검사 */
 const authMiddleware = (req, res, next) => {
-  const token = req.headers["x-access-token"] || req.query.token;
+  console.log(req.headers);
+  const token = cookieParser(req.headers.cookie, "accessToken");
   if (!token) {
-    return res.status(403).json({
+    console.log("no token..");
+    return res.status(401).json({
       success: false,
       message: "not logged in",
     });
@@ -17,7 +22,7 @@ const authMiddleware = (req, res, next) => {
   });
 
   const onError = (error) => {
-    res.status(403).json({
+    res.status(401).json({
       success: false,
       message: error.message,
     });
