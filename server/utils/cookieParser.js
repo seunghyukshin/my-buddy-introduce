@@ -6,7 +6,6 @@ const COOKIE_NAME = {
 const cookieParser = (cookieString, tokenType) => {
   const tokenIndex = cookieString.indexOf(COOKIE_NAME[tokenType]);
   const semicolonIndex = cookieString.indexOf(";", tokenIndex);
-  console.log(semicolonIndex);
   let token = cookieString.slice(
     tokenIndex + COOKIE_NAME[tokenType].length + 1,
     semicolonIndex

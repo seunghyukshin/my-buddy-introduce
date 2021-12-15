@@ -9,6 +9,11 @@ const login = async (id, email, profile) => {
     profileImage: profile.profile_image_url,
     social: { kakao: { id } },
   });
+
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${res.data.token.accessToken}`;
+
   return res.data;
 };
 
@@ -18,11 +23,14 @@ const checkVerify = () => {
   axios
     .get("/api/auth/verify", {
       headers: {
-        "x-access-token": getCookie("accessToken"),
+        Authorization: getCookie("accessToken"),
       },
     })
     .then((res) => {
       console.log(res);
+    })
+    .catch((err) => {
+      console.log(err.message);
     });
 };
 export { login, logout, checkVerify };

@@ -4,10 +4,8 @@ import cookieParser from "../utils/cookieParser.js";
 
 /* access token 검사 */
 const authMiddleware = (req, res, next) => {
-  // const token = cookieParser(req.headers.cookie, "accessToken");
-  const token = cookieParser(req.headers.cookie, "refreshToken");
-  console.log(token);
-  // const token = req.headers["x-access-token"] || req.query.token;
+  console.log(req.headers);
+  const token = cookieParser(req.headers.cookie, "accessToken");
   if (!token) {
     console.log("no token..");
     return res.status(401).json({

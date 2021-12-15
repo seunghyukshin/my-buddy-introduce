@@ -66,6 +66,7 @@ const Header = () => {
             isOpen={isOpenModal}
             onLoginSuccess={handleLoginSuccess}
             onCloseModal={handleCloseModal}
+            
           />
         </Nav>
       </StyledHeader>

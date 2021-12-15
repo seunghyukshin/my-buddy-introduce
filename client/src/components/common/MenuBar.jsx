@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
+import * as rest from "../../utils/RestApi";
 const DropdownMenu = (props) => {
   return (
     <DropdownContainer>
-      <DropdownItem>
+      <DropdownItem onClick={rest.checkVerify}>
         <ItemName>프로필 변경</ItemName>
       </DropdownItem>
 
